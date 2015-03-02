@@ -9,6 +9,7 @@ package {
   import flash.display.BitmapData;
   import flash.display.BlendMode;
   import flash.display.CapsStyle;
+  import flash.display.DisplayObject;
   import flash.display.GradientType;
   import flash.display.Graphics;
   import flash.display.GraphicsEndFill;
@@ -1036,7 +1037,10 @@ package {
       var m:Matrix = new Matrix();
       m.scale(2048.0 / SIZE, 2048.0 / SIZE);
       noiseLayer.visible = false;
-      exportBitmap.draw(this, m);
+	  var mask:DisplayObject = viewport.mask;
+	  viewport.mask = null;
+      exportBitmap.draw(viewport, m);
+	  viewport.mask = mask;
       noiseLayer.visible = originalNoiseLayerVisible;
       
       return PNGEncoder.encode(exportBitmap);
