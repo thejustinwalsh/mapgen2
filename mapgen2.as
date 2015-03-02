@@ -12,8 +12,6 @@ package {
   import flash.utils.getTimer;
   import flash.utils.Timer;
   import flash.net.FileReference;
-  import flash.system.System;
-  import de.polygonal.math.PM_PRNG;
   import com.adobe.images.PNGEncoder;
 
   [SWF(width="800", height="600", frameRate=60)]
