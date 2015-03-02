@@ -3,16 +3,42 @@
 // License: MIT
 
 package {
-  import graph.*;
-  import flash.geom.*;
-  import flash.display.*;
-  import flash.events.*;
-  import flash.text.*;
-  import flash.utils.ByteArray;
-  import flash.utils.getTimer;
-  import flash.utils.Timer;
-  import flash.net.FileReference;
   import com.adobe.images.PNGEncoder;
+  
+  import flash.display.Bitmap;
+  import flash.display.BitmapData;
+  import flash.display.BlendMode;
+  import flash.display.CapsStyle;
+  import flash.display.GradientType;
+  import flash.display.Graphics;
+  import flash.display.GraphicsEndFill;
+  import flash.display.GraphicsPath;
+  import flash.display.GraphicsPathCommand;
+  import flash.display.GraphicsSolidFill;
+  import flash.display.IGraphicsData;
+  import flash.display.LineScaleMode;
+  import flash.display.Shape;
+  import flash.display.SpreadMethod;
+  import flash.display.Sprite;
+  import flash.events.Event;
+  import flash.events.KeyboardEvent;
+  import flash.events.MouseEvent;
+  import flash.events.TimerEvent;
+  import flash.geom.Matrix;
+  import flash.geom.Matrix3D;
+  import flash.geom.Point;
+  import flash.geom.Vector3D;
+  import flash.net.FileReference;
+  import flash.text.TextField;
+  import flash.text.TextFieldType;
+  import flash.text.TextFormat;
+  import flash.utils.ByteArray;
+  import flash.utils.Timer;
+  import flash.utils.getTimer;
+  
+  import graph.Center;
+  import graph.Corner;
+  import graph.Edge;
 
   [SWF(width="800", height="600", frameRate=60)]
   public class mapgen2 extends Sprite {
@@ -95,11 +121,21 @@ package {
     public var lava:Lava;
     public var watersheds:Watersheds;
     public var noisyEdges:NoisyEdges;
+	
+	// Masked map viewport
+	public var viewport:Sprite = new Sprite();
 
 
     public function mapgen2() {
       stage.scaleMode = 'noScale';
       stage.align = 'TL';
+	  
+	  addChild(viewport);
+	  var mask:Shape = new Shape();
+	  mask.graphics.beginFill(0xFF00FF);
+	  mask.graphics.drawRect(0, 0, SIZE, SIZE);
+	  mask.graphics.endFill();
+	  viewport.mask = mask;
 
       addChild(noiseLayer);
       noiseLayer.bitmapData.noise(555, 128-10, 128+10, 7, true);
@@ -157,7 +193,9 @@ package {
 
     
     public function graphicsReset():void {
-      triangles3d = [];
+      var graphics:Graphics = viewport.graphics;
+	  
+	  triangles3d = [];
       graphics.clear();
       graphics.beginFill(0xbbbbaa);
       graphics.drawRect(0, 0, 2000, 2000);
@@ -426,7 +464,8 @@ package {
 
     // Draw the map in the current map mode
     public function drawMap(mode:String):void {
-      graphicsReset();
+	  var graphics:Graphics = viewport.graphics;
+	  graphicsReset();
       noiseLayer.visible = true;
       
       drawHistograms();
