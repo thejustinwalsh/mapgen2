@@ -48,9 +48,20 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="default" platformId="default">
-      <airSettings airCertificatePath="" airTimestamp="true" anePathSet="false" version="1">
-        <airExcludes/>
+      <airSettings airCertificatePath="/Users/axon/Projects/Flash/mapgen2/cert.p12" airTimestamp="true" anePathSet="true" version="1">
+        <airExcludes>
+          <pathEntry path="third-party"/>
+          <pathEntry path=".gitignore"/>
+          <pathEntry path=".gitmodules"/>
+          <pathEntry path=".git"/>
+          <pathEntry path=".DS_Store"/>
+          <pathEntry path="README.md"/>
+        </airExcludes>
         <anePaths/>
+        <newLaunchParams/>
+        <modifiedLaunchParams/>
+        <newPackagingParams/>
+        <modifiedPackagingParams/>
       </airSettings>
       <actionScriptSettings version="1"/>
     </buildTarget>
