@@ -5,6 +5,7 @@
       <compilerSourcePathEntry kind="1" linkType="1" path="third-party/as3corelib/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="third-party/as3delaunay/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="third-party/PM_PRNG"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="third-party/minimalcomps/src"/>
     </compilerSourcePath>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">

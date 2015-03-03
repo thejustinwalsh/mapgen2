@@ -5,3 +5,6 @@
 	path = third-party/as3corelib
 	url = git://github.com/mikechambers/as3corelib.git
 
+[submodule "third-party/minimalcomps"]
+	path = third-party/minimalcomps
+	url = git://github.com/thejustinwalsh/minimalcomps.git
