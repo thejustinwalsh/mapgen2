@@ -125,12 +125,15 @@ package {
 	
 	// Masked map viewport
 	public var viewport:Sprite = new Sprite();
+	
+	// Histograms
+	public var renderHistograms:Boolean = true;
+	
+	// Command queue complete callback
+	public var commandCallback:Function = null;
 
 
-    public function mapgen2() {
-      stage.scaleMode = 'noScale';
-      stage.align = 'TL';
-	  
+    public function mapgen2(showControls:Boolean = true, autoExecute:Boolean = true) {
 	  addChild(viewport);
 	  var mask:Shape = new Shape();
 	  mask.graphics.beginFill(0xFF00FF);
@@ -143,7 +146,7 @@ package {
       noiseLayer.blendMode = BlendMode.HARDLIGHT;
 
       controls.x = SIZE;
-      addChild(controls);
+      if (showControls) addChild(controls);
 
       addExportButtons();
       addViewButtons();
@@ -152,7 +155,7 @@ package {
       addMiscLabels();
 
       map = new Map(SIZE);
-      go(islandType, pointType, numPoints);
+      if (autoExecute) go(islandType, pointType, numPoints);
       
       render3dTimer.addEventListener(TimerEvent.TIMER, function (e:TimerEvent):void {
           // TODO: don't draw this while the map is being built
@@ -259,6 +262,7 @@ package {
       if (_guiQueue.length == 0) {
         stage.removeEventListener(Event.ENTER_FRAME, _onEnterFrame);
         statusBar.text = "";
+		if (commandCallback) commandCallback();
       } else {
         statusBar.text = _guiQueue[0][0];
       }
@@ -287,7 +291,7 @@ package {
        'TAIGA', 'SHRUBLAND', 'TEMPERATE_DESERT', 'TEMPERATE_RAIN_FOREST',
        'TEMPERATE_DECIDUOUS_FOREST', 'GRASSLAND', 'SUBTROPICAL_DESERT',
        'TROPICAL_RAIN_FOREST', 'TROPICAL_SEASONAL_FOREST'];
-    public function drawHistograms():void {
+    public function drawHistograms(x:Number = 23, y:Number = 200, width:Number = 154):void {
       // There are pairs of functions for each chart. The bucket
       // function maps the polygon Center to a small int, and the
       // color function maps the int to a color.
@@ -374,7 +378,6 @@ package {
         }
       }
 
-      var x:Number = 23, y:Number = 200, width:Number = 154;
       drawDistribution(x, y, landTypeBucket, landTypeColor, width, 20);
       drawDistribution(x, y+25, biomeBucket, biomeColor, width, 20);
 
@@ -469,7 +472,7 @@ package {
 	  graphicsReset();
       noiseLayer.visible = true;
       
-      drawHistograms();
+      if (renderHistograms) drawHistograms();
       
       if (mode == '3d') {
         if (!render3dTimer.running) render3dTimer.start();
