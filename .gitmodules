@@ -8,3 +8,6 @@
 [submodule "third-party/minimalcomps"]
 	path = third-party/minimalcomps
 	url = git://github.com/thejustinwalsh/minimalcomps.git
+[submodule "third-party/as3-eaze-tween"]
+	path = third-party/as3-eaze-tween
+	url = git://github.com/thejustinwalsh/as3-eaze-tween.git
