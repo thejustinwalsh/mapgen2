@@ -6,6 +6,8 @@
       <compilerSourcePathEntry kind="1" linkType="1" path="third-party/as3delaunay/src"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="third-party/PM_PRNG"/>
       <compilerSourcePathEntry kind="1" linkType="1" path="third-party/minimalcomps/src"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="third-party/Base64"/>
+      <compilerSourcePathEntry kind="1" linkType="1" path="third-party/as3-eaze-tween/src"/>
     </compilerSourcePath>
     <libraryPath defaultLinkType="0">
       <libraryPathEntry kind="4" path="">
