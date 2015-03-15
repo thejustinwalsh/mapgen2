@@ -58,6 +58,8 @@ package
 			super();
 			stage.nativeWindow.width = 924 + (stage.nativeWindow.width - stage.nativeWindow.stage.stageWidth);
 			stage.nativeWindow.height = 600 + (stage.nativeWindow.height - stage.nativeWindow.stage.stageHeight);
+			stage.stageWidth = 924;
+			stage.stageHeight = 600;
 			
 			menu = new Menu(stage);
 			menu.addEventListener(MenuEvent.NEW, onNewProject, false, 0, true);
