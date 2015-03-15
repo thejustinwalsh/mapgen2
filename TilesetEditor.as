@@ -1,5 +1,6 @@
 package
 {
+	import com.bit101.components.ComboBox;
 	import com.bit101.components.InputText;
 	import com.bit101.components.Label;
 	import com.bit101.components.NumericStepper;
@@ -26,6 +27,8 @@ package
 	import aze.motion.eaze;
 	import aze.motion.easing.Cubic;
 	
+	import components.TileWell;
+	
 	import data.Project;
 	
 	import events.EditorEvent;
@@ -36,6 +39,7 @@ package
 		private var project:Project;
 		private var tilesetIndex:int;
 		private var tilesetSource:String;
+		private var tilesetBitmap:Bitmap;
 		
 		private var SIZE:int;
 		private var PADDING:int;
@@ -67,6 +71,22 @@ package
 		private var tilesetPaddingStepper:NumericStepper;
 		private var tilesetSizeLabel:Label;
 		private var tilesetSizeStepper:NumericStepper;
+		private var biomeLabel:Label;
+		private var biomeComboBox:ComboBox;
+		private var biomeTileLabel:Label;
+		private var biomeTileNO:TileWell;
+		private var biomeTileNE:TileWell;
+		private var biomeTileN:TileWell;
+		private var biomeTileNW:TileWell;
+		private var biomeTileEO:TileWell;
+		private var biomeTileE:TileWell;
+		private var biomeTileC:TileWell;
+		private var biomeTileW:TileWell;
+		private var biomeTileWO:TileWell;
+		private var biomeTileSE:TileWell;
+		private var biomeTileS:TileWell;
+		private var biomeTileSW:TileWell;
+		private var biomeTileSO:TileWell;
 		
 		public function get tileset():int { return tilesetIndex; }
 		
@@ -163,9 +183,34 @@ package
 			});
 			tilesetSizeStepper.minimum = 0; tilesetSizeStepper.value = tileSize;
 			
+			biomeLabel = new Label(panel.content, PADDING, tilesetMarginStepper.y + PADDING, "Biomes");
+			biomeComboBox = new ComboBox(panel.content, PADDING, biomeLabel.y + PADDING, "OCEAN", [
+				'OCEAN', 'MARSH', 'ICE', 'LAKE', 'BEACH', 'SNOW', 'TUNDRA', 'BARE', 'SCORCHED', 'TAIGA', 'SHRUBLAND', 
+				'TEMPERATE_DESERT', 'TEMPERATE_RAIN_FOREST', 'TEMPERATE_DECIDUOUS_FOREST', 'GRASSLAND', 'TEMPERATE_DESERT', 
+				'TROPICAL_RAIN_FOREST', 'TROPICAL_SEASONAL_FOREST', 'GRASSLAND', 'SUBTROPICAL_DESERT'
+			]);
+			biomeComboBox.width = panel.width - PADDING*2 + 4;
+			
+			biomeTileLabel = new Label(panel.content, PADDING, biomeComboBox.y + biomeComboBox.height + PADDING, "Biome Tiles");
+			
+			var wellPadding:int = 57;
+			var wellOffsetY:int = biomeTileLabel.y + PADDING;
+			biomeTileNO = new TileWell(panel.content, PADDING + wellPadding * 2, wellOffsetY + wellPadding * 0, false);
+			biomeTileNE = new TileWell(panel.content, PADDING + wellPadding * 1, wellOffsetY + wellPadding * 1, false);
+			biomeTileN  = new TileWell(panel.content, PADDING + wellPadding * 2, wellOffsetY + wellPadding * 1, false);
+			biomeTileNW = new TileWell(panel.content, PADDING + wellPadding * 3, wellOffsetY + wellPadding * 1, false);
+			biomeTileEO = new TileWell(panel.content, PADDING + wellPadding * 0, wellOffsetY + wellPadding * 2, false);
+			biomeTileE  = new TileWell(panel.content, PADDING + wellPadding * 1, wellOffsetY + wellPadding * 2, false);
+			biomeTileC  = new TileWell(panel.content, PADDING + wellPadding * 2, wellOffsetY + wellPadding * 2, true);
+			biomeTileW  = new TileWell(panel.content, PADDING + wellPadding * 3, wellOffsetY + wellPadding * 2, false);
+			biomeTileWO = new TileWell(panel.content, PADDING + wellPadding * 4, wellOffsetY + wellPadding * 2, false);
+			biomeTileSE = new TileWell(panel.content, PADDING + wellPadding * 1, wellOffsetY + wellPadding * 3, false);
+			biomeTileS  = new TileWell(panel.content, PADDING + wellPadding * 2, wellOffsetY + wellPadding * 3, false);
+			biomeTileSW = new TileWell(panel.content, PADDING + wellPadding * 3, wellOffsetY + wellPadding * 3, false);
+			biomeTileSO = new TileWell(panel.content, PADDING + wellPadding * 2, wellOffsetY + wellPadding * 4, false);
 			
 			
-			closeButton = new PushButton(panel.content, PADDING, PADDING * 10, "Close", function(e:MouseEvent):void {
+			closeButton = new PushButton(panel.content, panel.width - 100 - PADDING, panel.height - 20 - PADDING, "Close", function(e:MouseEvent):void {
 				hide();
 			});
 		}
@@ -312,6 +357,14 @@ package
 			}
 		}
 		
+		public function updateBiomeTiles():void
+		{
+			if (!tilesetBitmap) return;
+			
+			// TEST
+			//biomeTileC.setTileSource(tilesetBitmap.bitmapData, 2, 2, 24, 24);
+		}
+		
 		private function loadTileset():void
 		{
 			if (project.tilesets[tilesetIndex].src != "" && (spriteSheet.numChildren == 0 || project.tilesets[tilesetIndex].src != tilesetSource)) {
@@ -323,10 +376,11 @@ package
 					loaderContext.imageDecodingPolicy = ImageDecodingPolicy.ON_LOAD;
 					var loader:Loader = new Loader();
 					loader.contentLoaderInfo.addEventListener(Event.INIT, function(e:Event):void {
-						var image:DisplayObject = e.target.content as DisplayObject;
-						tileImageSize.x = image.width;
-						tileImageSize.y = image.height;
+						tilesetBitmap = e.target.content as Bitmap;
+						tileImageSize.x = tilesetBitmap.width;
+						tileImageSize.y = tilesetBitmap.height;
 						updateViewport();
+						updateBiomeTiles();
 					});
 					
 					loader.load( new URLRequest(file.url), loaderContext);
@@ -338,6 +392,7 @@ package
 		
 		private function onMouseWheel(e:MouseEvent):void
 		{
+			if (!viewport.hitTestPoint(stage.mouseX, stage.mouseY)) return;
 			gridScale += Math.floor(e.delta >= 0 ? 1 : -1);
 			gridScale = Math.max(1, gridScale);
 			gridScale = Math.min(4, gridScale);
